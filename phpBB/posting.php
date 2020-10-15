@@ -725,7 +725,7 @@ if ($mode == 'edit' && $post_data['bbcode_uid'])
 $bbcode_status	= ($config['allow_bbcode'] && $auth->acl_get('f_bbcode', $forum_id)) ? true : false;
 $smilies_status	= ($config['allow_smilies'] && $auth->acl_get('f_smilies', $forum_id)) ? true : false;
 $img_status		= ($bbcode_status && $auth->acl_get('f_img', $forum_id)) ? true : false;
-$url_status		= ($config['allow_post_links'] || $auth->acl_get('a_') || $auth->acl_get('m_')) ? true : false;
+$url_status		= ($config['allow_post_links'] || $auth->acl_get('a_') || $auth->acl_get('m_'));
 $flash_status	= ($bbcode_status && $auth->acl_get('f_flash', $forum_id) && $config['allow_post_flash']) ? true : false;
 $quote_status	= true;
 
@@ -747,7 +747,7 @@ if ($save && $user->data['is_registered'] && $auth->acl_get('u_savedrafts') && (
 		if (confirm_box(true))
 		{
 			$message_parser->message = $message;
-			$message_parser->parse($post_data['enable_bbcode'], ($config['allow_post_links']) ? $post_data['enable_urls'] : false, $post_data['enable_smilies'], $img_status, $flash_status, $quote_status, $config['allow_post_links']);
+			$message_parser->parse($post_data['enable_bbcode'], ($url_status) ? $post_data['enable_urls'] : false, $post_data['enable_smilies'], $img_status, $flash_status, $quote_status, $url_status);
 
 			$sql = 'INSERT INTO ' . DRAFTS_TABLE . ' ' . $db->sql_build_array('INSERT', array(
 				'user_id'		=> (int) $user->data['user_id'],
@@ -1086,7 +1086,7 @@ if ($submit || $preview || $refresh)
 
 		if (!$preview || !empty($message_parser->message))
 		{
-			$message_parser->parse($post_data['enable_bbcode'], ($config['allow_post_links']) ? $post_data['enable_urls'] : false, $post_data['enable_smilies'], $img_status, $flash_status, $quote_status, $config['allow_post_links']);
+			$message_parser->parse($post_data['enable_bbcode'], ($url_status) ? $post_data['enable_urls'] : false, $post_data['enable_smilies'], $img_status, $flash_status, $quote_status, $url_status);
 		}
 
 		// On a refresh we do not care about message parsing errors

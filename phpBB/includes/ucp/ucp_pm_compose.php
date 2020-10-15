@@ -685,7 +685,7 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 	$smilies_status	= ($config['allow_smilies'] && $config['auth_smilies_pm'] && $auth->acl_get('u_pm_smilies')) ? true : false;
 	$img_status		= ($config['auth_img_pm'] && $auth->acl_get('u_pm_img')) ? true : false;
 	$flash_status	= ($config['auth_flash_pm'] && $auth->acl_get('u_pm_flash')) ? true : false;
-	$url_status		= ($config['allow_post_links'] || $auth->acl_get('a_') || $auth->acl_get('m_')) ? true : false;
+	$url_status		= ($config['allow_post_links'] || $auth->acl_get('a_') || $auth->acl_get('m_'));
 	// Save Draft
 	if ($save && $auth->acl_get('u_savedrafts'))
 	{
@@ -850,7 +850,7 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 		}
 
 		// Parse message
-		$message_parser->parse($enable_bbcode, ($config['allow_post_links']) ? $enable_urls : false, $enable_smilies, $img_status, $flash_status, true, $config['allow_post_links']);
+		$message_parser->parse($enable_bbcode, ($url_status) ? $enable_urls : false, $enable_smilies, $img_status, $flash_status, true, $url_status);
 
 		// On a refresh we do not care about message parsing errors
 		if (count($message_parser->warn_msg) && !$refresh)
@@ -1042,7 +1042,7 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 		if ($action == 'quotepost')
 		{
 			$post_id = $request->variable('p', 0);
-			if ($config['allow_post_links'])
+			if ($url_status)
 			{
 				$message_link = generate_board_url() . "/viewtopic.$phpEx?p={$post_id}#p{$post_id}";
 				$message_link_subject = "{$user->lang['SUBJECT']}{$user->lang['COLON']} {$message_subject}";
@@ -1103,7 +1103,7 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 	{
 		$fwd_to_field = write_pm_addresses(array('to' => $post['to_address']), 0, true);
 
-		if ($config['allow_post_links'])
+		if ($url_status)
 		{
 			$quote_username_text = '[url=' . generate_board_url() . "/memberlist.$phpEx?mode=viewprofile&amp;u={$post['author_id']}]{$quote_username}[/url]";
 		}
