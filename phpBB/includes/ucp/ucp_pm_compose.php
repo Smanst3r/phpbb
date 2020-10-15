@@ -685,8 +685,7 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 	$smilies_status	= ($config['allow_smilies'] && $config['auth_smilies_pm'] && $auth->acl_get('u_pm_smilies')) ? true : false;
 	$img_status		= ($config['auth_img_pm'] && $auth->acl_get('u_pm_img')) ? true : false;
 	$flash_status	= ($config['auth_flash_pm'] && $auth->acl_get('u_pm_flash')) ? true : false;
-	$url_status		= ($config['allow_post_links']) ? true : false;
-
+	$url_status		= ($config['allow_post_links'] || $auth->acl_get('a_') || $auth->acl_get('m_')) ? true : false;
 	// Save Draft
 	if ($save && $auth->acl_get('u_savedrafts'))
 	{
